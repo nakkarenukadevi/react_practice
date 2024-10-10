@@ -22,6 +22,7 @@ const StarRating = () => {
             <div className='flex justify-center'>
                 <div className=' mt-10' onClick={handleRating}>
 
+
                     <FontAwesomeIcon icon={faStar} id={1} className={rating ? "addcolor h-10" : "h-10"} />
                     <FontAwesomeIcon icon={faStar} id={2} className={rating >= 2 ? "addcolor h-10" : "h-10"} />
                     <FontAwesomeIcon icon={faStar} id={3} className={rating >= 3 ? "addcolor h-10" : "h-10"} />
