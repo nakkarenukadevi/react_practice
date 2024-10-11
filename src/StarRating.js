@@ -10,7 +10,7 @@ const StarRating = () => {
 
     const handleRating = (e) => {
 
-        console.log(e.target.closest("svg").id)
+
         let rating = e.target.closest("svg").id;
         setRating(rating)
     }

@@ -5,3 +5,8 @@
   color:red;
   
 }
+.close{
+  position: relative;
+    top: 2px;
+    left: 517px;
+}

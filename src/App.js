@@ -1,14 +1,17 @@
+import { useState } from "react";
 import "./App.css";
-import StarRating from "./StarRating";
 
+import Header from "./Header";
+import { Outlet } from "react-router-dom";
 
 
 function App() {
-
   return (
-    <div>
-      <StarRating />
-    </div>
+    <>
+      <Header />
+      <Outlet />
+    </>
+
   )
 }
 
