@@ -32,7 +32,18 @@ const AppRouter = createBrowserRouter([
             },
             {
                 path: "/sorttable",
-                element: <SortTable />
+                element: <SortTable columnConfiger={[
+                    { lable: "Name", key: "name" },
+                    { lable: "Fathername", key: "fathername" },
+                    { lable: "Mothername", key: "mothername" },
+                    { lable: "City", key: "city" }]}
+                    persondata={[
+                        { name: "renukadevi", fathername: "sankarrao", mothername: "ramanamma" },
+                        { name: "bhanuprakash", fathername: "sankarrao", mothername: "ramanamma" },
+                        { name: "arachana", fathername: "pondiah", mothername: "nagalashmi" },
+                        { name: "ramya", fathername: "verabramm", mothername: "krishna" },
+
+                    ]} />
             }
         ]
 
