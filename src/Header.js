@@ -34,6 +34,10 @@ const Header = () => {
                         <li className=' font-bold p-3 hover:bg-green-500 hover:text-white  '>
                             <Link to='/sorttable'>SortTable</Link>
                         </li>
+                        <Link to='/form'>  <li className=' font-bold p-3 hover:bg-green-500 hover:text-white  '>
+
+                            FormValidation
+                        </li></Link>
                     </ul>
                 </div>
             </div> : null}

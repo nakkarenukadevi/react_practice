@@ -1,48 +1,98 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addperson } from './Store/personSlice';
+import React, { useEffect, useState } from 'react';
+
 import Table from './Table';
 
 const SortTable = ({ columnConfiger, persondata }) => {
+    let [filterConfig, setfilterConfig] = useState({})
 
-    let { data } = useSelector((state) => state.data)
+
+    let [showdata, setShowdata] = useState(persondata);
+
+
 
     let [sdata, setsdata] = useState({
+        id: "",
         name: "",
         fathername: "",
         mothername: "",
         city: ""
-    })
-    let [showdata, setShowdata] = useState([]);
+    });
 
-    let dispatch = useDispatch();
 
     let handleChangeData = (e) => {
-        setsdata(prveState => ({ ...prveState, [e.target.name]: e.target.value }))
+
+        setsdata(prveState => ({ ...prveState, [e.target.name]: e.target.value }));
+
     }
 
     const handleSubmit = () => {
-        setShowdata([...showdata, sdata])
+        if (sdata.name && sdata.fathername && sdata.mothername && sdata.city !== "") {
+            setShowdata([...showdata, sdata])
+        }
+
+
     }
 
     const handlesort = (e) => {
-        let key = e.target.key;
-        let data2 = [...data];
-        let x = data2.sort((a, b) => {
-            return a[key].localeCompare(b[key]);
-        });
-        dispatch()
+
+        let data2 = [...showdata];
+        data2.sort((a, b) => {
+            let { key, dataType } = JSON.parse(e.target.dataset.src);
+
+            switch (dataType) {
+                case "string":
+                    return a[key].localeCompare(b[key]);
+                case "number":
+                    return a[key] - b[key];
+
+            }
+        })
+
+        setShowdata(data2)
+
     }
+
+    const handlefilterConfig = (e) => {
+        let { key, dataType } = JSON.parse(e.target.dataset.src);
+        let updatedFilterConfig = { ...filterConfig, [e.target.name]: { value: e.target.value, dataType: dataType } }
+        setfilterConfig(updatedFilterConfig);
+
+
+        let filteredData = showdata.filter((data) => {
+            let filterKeyValues = Object.entries(updatedFilterConfig)
+            return filterKeyValues.every(([filterKey, filterValue]) => {
+
+                switch (filterValue.dataType) {
+                    case "string": {
+                        return data[filterKey].includes(filterValue.value);
+
+                    }
+                    case "number": {
+                        return data[filterKey].includes(filterValue.value)
+
+                    }
+                }
+
+            })
+
+        })
+        setShowdata(filteredData)
+    }
+
 
     return (
         <>
             <div className='flex  w-full flex-row p-20'>
-                <div className='w-1/4 md:w-1/2'>
-                    <div className='flex justify-between items-center '>
+                <div className='w-1/4 md:w-1/2  sm:flex-col'>
+                    <div className='flex justify-between items-center'>
+                        <div>Id:</div>
+                        <div>   <input type="text" name="id" placeholder='id' value={sdata.id}
+                            onChange={handleChangeData} className='border-2 border-gray-500 rounded-lg my-2 ' /></div>
+                    </div>
+                    <div className='flex justify-between items-center'>
                         <div>Name:</div>
                         <div>   <input type="text" name="name" placeholder='sname' value={sdata.name}
                             onChange={handleChangeData} className='border-2 border-gray-500 rounded-lg my-2 ' /></div>
-
                     </div>
                     <div className='flex justify-between items-center'>
                         <div>fatherName:</div>
@@ -67,23 +117,12 @@ const SortTable = ({ columnConfiger, persondata }) => {
                     ><button onClick={() => { handleSubmit() }} className=''>Submit</button></div>
 
                 </div>
-                <div className='flex basis-3/4 mx-20 md:w-1/2 md:mx-10'> <table className='border-2 border-black  p-5'>
-                    <thead>
-                        <tr className='border-2 border-black' onClick={handlesort}>
-                            {columnConfiger.map((lable) => {
-                                return <td className='border-2 border-black p-2' key={lable.key}>{lable.lable}</td>
-
-
-                            })}
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <Table data={showdata} />
-                    </tbody>
-                </table>
+                <div className='flex basis-3/4 mx-20 md:w-1/2 md:mx-10 sm:flex-col'>
+                    <Table data={showdata} columnConfiger={columnConfiger} handlesort={handlesort} filterConfig={filterConfig} handlefilterConfig={handlefilterConfig} />
                 </div>
+
             </div>
+
         </>
     )
 }
