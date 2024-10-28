@@ -3,12 +3,9 @@ import React, { useEffect, useState } from 'react';
 import Table from './Table';
 
 const SortTable = ({ columnConfiger, persondata }) => {
+
     let [filterConfig, setfilterConfig] = useState({})
-
-
     let [showdata, setShowdata] = useState(persondata);
-
-
 
     let [sdata, setsdata] = useState({
         id: "",
@@ -29,7 +26,6 @@ const SortTable = ({ columnConfiger, persondata }) => {
         if (sdata.name && sdata.fathername && sdata.mothername && sdata.city !== "") {
             setShowdata([...showdata, sdata])
         }
-
 
     }
 
@@ -58,24 +54,39 @@ const SortTable = ({ columnConfiger, persondata }) => {
         setfilterConfig(updatedFilterConfig);
 
 
-        let filteredData = showdata.filter((data) => {
-            let filterKeyValues = Object.entries(updatedFilterConfig)
-            return filterKeyValues.every(([filterKey, filterValue]) => {
+        let filteredData = persondata.filter((data) => {
 
-                switch (filterValue.dataType) {
-                    case "string": {
-                        return data[filterKey].includes(filterValue.value);
+            let inputValues = Object.values(updatedFilterConfig)
+            if (inputValues.value == '') {
+                setShowdata(persondata)
+            } else {
 
+
+                let filterKeyValues = Object.entries(updatedFilterConfig)
+
+
+                return filterKeyValues.every(([filterKey, filterValue]) => {
+
+
+
+                    switch (filterValue.dataType) {
+                        case "string": {
+                            return data[filterKey].includes(filterValue.value);
+
+                        }
+                        case "number": {
+                            let value = parseInt(filterValue.value)
+                            return data[filterKey] === value
+
+                        }
                     }
-                    case "number": {
-                        return data[filterKey].includes(filterValue.value)
 
-                    }
-                }
+                })
 
-            })
+            }
 
         })
+
         setShowdata(filteredData)
     }
 
